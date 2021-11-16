@@ -40,19 +40,22 @@ void Grammar::readGrammar() {
 				LHS = productionVector[j];
 			}
 			LHSVector.push_back(productionVector[j]);
-			//else {
-				//this->encounteredError = "[Error: the given grammar is not context free. More than one symbol encountered on the LHS.]\n";
-				//return;
-			//}
 			j++;
 		}
-		// check if LHS is non-terminal
-		// A 1 -> ... fix
+		// check if LHS contains at least one non-terminal and if all terms are in the terminal set
+		bool foundNonTerm = false;
 		for (int k = 0; k < LHSVector.size(); k++) {
-			if (!Helper::findInVector(this->nonTerminals, LHSVector[k])) {
-				this->encounteredError = "[Error: LHS contains terminal symbol '" + LHSVector[k] + "'.]\n";
+			if (Helper::findInVector(this->nonTerminals, LHSVector[k])) {
+				foundNonTerm = true;
+			}
+			else if(!Helper::findInVector(this->terminals, LHSVector[k])){
+				this->encounteredError = "[Error: LHS symbol '" + LHSVector[k] + "' is neither a terminal, nor a non-terminal symbol.]\n";
 				return;
 			}
+		}
+		if (!foundNonTerm) {
+			this->encounteredError = "[Error: LHS does not contain any non-terminal symbol.]\n";
+			return;
 		}
 		
 		// go through RHS
@@ -150,7 +153,7 @@ void Grammar::displayProductions() {
 		for (int j = 0; j < this->productions[i].RHS.size(); j++) {
 			std::cout << this->productions[i].RHS[j] << ' ';
 		}
-		std::cout << "(idx: '" << this->productions[i].index << "')";
+		std::cout << "(idx: " << this->productions[i].index << ")";
 		std::cout << '\n';
 	}
 	std::cout << "[... done]\n";
@@ -163,7 +166,7 @@ void Grammar::displayProductions(std::vector<Production> productions) {
 		for (int j = 0; j < productions[i].RHS.size(); j++) {
 			std::cout << productions[i].RHS[j] << ' ';
 		}
-		std::cout << "(idx: '" << productions[i].index << "')";
+		std::cout << "(idx: " << productions[i].index << ")";
 		std::cout << '\n';
 	}
 	std::cout << "[... done]\n";

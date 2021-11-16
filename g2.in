@@ -1,5 +1,5 @@
-program cmds cmd simplecmd defcmd declist declaration dtype primitive arraydecl assigndecl assigncmd symbolvalue expression term factor array element readcmd printcmd expressionprint factorprint structcmd ifstmt condition comparisonoperator logicaloperator whilestmt procstmt callstmt paramslist arrayelement basiccondition zero digit non_zero_digit letter identifier lettersordigits constchar conststring string character constno non_zero_number digits
-START FINISH DEF NUMBER STRING CHAR ARRAY OF UNDEFINED READ IF STARTIF FINISHIF ASSIGN WHILE STARTWHILE FINISHWHILE PROC STARTPROC FINISHPROC CALL RETURN PRINT + - * / < <= === !== >= > || && ; , : [ ] ( ) " ' 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+program cmds cmd simplecmd defcmd declist declaration dtype primitive arraydecl assigndecl assigncmd symbolvalue expression term factor array element readcmd printcmd expressionprint factorprint structcmd ifstmt condition comparisonoperator logicaloperator whilestmt procstmt callstmt paramslist arrayelement basiccondition zero digit non_zero_digit letter lettersordigits constchar conststring string character constno non_zero_number digits
+START FINISH DEF NUMBER STRING CHAR ARRAY OF UNDEFINED READ IF STARTIF FINISHIF ASSIGN WHILE STARTWHILE FINISHWHILE PROC STARTPROC FINISHPROC CALL RETURN PRINT + - * / < <= === !== >= > || && ; , : [ ] ( ) " ' id constant
 30
 program -> START cmds FINISH
 cmds -> cmd | cmd cmds
@@ -7,17 +7,17 @@ cmd -> simplecmd | structcmd
 simplecmd -> defcmd | assigncmd | readcmd
 defcmd -> DEF declist
 declist -> declaration | declaration ; declist
-declaration -> identifier : dtype
+declaration -> id : dtype
 dtype -> primitive | arraydecl
 primitive -> NUMBER | STRING | CHAR
 arraydecl -> ARRAY [ constno ] OF primitive
-assigncmd -> ASSIGN identifier : symbolvalue | ASSIGN identifier : ( expression )
-symbolvalue -> identifier | constno | constchar | conststring | arrayelement
+assigncmd -> ASSIGN id : symbolvalue | ASSIGN id : ( expression )
+symbolvalue -> id | constno | constchar | conststring | arrayelement
 expression -> term | expression + term | expression - term
 term -> term * factor | term / factor | factor
-factor -> ( expression ) | identifier | constno | constchar | conststring | arrayelement
-arrayelement -> identifier [ constno ] | identifier [ identifier ]
-readcmd -> READ identifier
+factor -> ( expression ) | id | constno | constchar | conststring | arrayelement
+arrayelement -> id [ constno ] | id [ id ]
+readcmd -> READ id
 printcmd -> PRINT ( expressionprint )
 expressionprint -> factorprint | factorprint + expressionprint
 factorprint -> constno | constchar | conststring | callstmt
@@ -28,7 +28,7 @@ basiccondition -> symbolvalue comparisonoperator symbolvalue
 comparisonoperator -> < | > | <= | >= | === | !==
 logicaloperator -> && | ||
 whilestmt -> WHILE condition STARTWHILE cmds FINISHWHILE
-procstmt -> PROC identifier ( ) STARTPROC cmds FINISHPROC | PROC identifier ( declist ) STARTPROC cmds FINISHPROC
-callstmt -> CALL identifier ( ) | CALL identifier ( paramslist )
+procstmt -> PROC id ( ) STARTPROC cmds FINISHPROC | PROC id ( declist ) STARTPROC cmds FINISHPROC
+callstmt -> CALL id ( ) | CALL id ( paramslist )
 paramslist -> symbolvalue | symbolvalue , paramslist
 program

@@ -18,8 +18,8 @@ class Grammar
 {
 private:
 	std::string gPath;
-	std::vector<std::string> nonTerminals; // sets
-	std::vector<std::string> terminals; // sets
+	std::vector<std::string> nonTerminals;
+	std::vector<std::string> terminals;
 	std::vector<Production> productions;
 	std::string startingSymbol;
 	std::string encounteredError = "";
